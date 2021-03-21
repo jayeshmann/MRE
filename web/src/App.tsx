@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-import { Button, Divider, Header, Container } from "semantic-ui-react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Container } from "semantic-ui-react";
 
 import { apiBaseUrl } from "./constants";
 import { setPatientList, useStateValue } from "./state";
@@ -32,11 +32,14 @@ const App: React.FC = () => {
     <div className="App">
       <Router>
         <Container>
-          <Header as="h1">Patientor</Header>
-          <Button as={Link} to="/" primary>
-            Home
-          </Button>
-          <Divider hidden />
+          <div className="nav">
+            <div className="ul">
+              <div className="li">
+                <div className="btn">Medical Record Entry</div>
+              </div>
+            </div>
+          </div>
+
           <Switch>
             <Route path="/patients/:id" render={() => <PatientPage />} />
             <Route path="/" render={() => <PatientListPage />} />
