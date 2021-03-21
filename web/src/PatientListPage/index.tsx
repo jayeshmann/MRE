@@ -6,9 +6,9 @@ import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import AddPatientModal from "../AddPatientModal";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
-import HealthRatingBar from "../components/HealthRatingBar";
 import { useStateValue } from "../state";
 import { Link } from "react-router-dom";
+import { HealthRating } from "./HealthRating";
 
 const PatientListPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -52,21 +52,31 @@ const PatientListPage: React.FC = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {Object.values(patients).map((patient: Patient) => (
-            <Table.Row key={patient.id}>
-              <Table.Cell>
-                <Link to={`/patients/${patient.id}`}>{patient.name}</Link>
-              </Table.Cell>
-              <Table.Cell>{patient.gender}</Table.Cell>
-              <Table.Cell>{patient.occupation}</Table.Cell>
-              <Table.Cell>
-                <HealthRatingBar
-                  showText={false}
-                  rating={Math.floor(Math.random() * (4 - 0 + 1) + 0)}
-                />
-              </Table.Cell>
-            </Table.Row>
-          ))}
+          {Object.values(patients).map((patient: Patient) => {
+            const healthRatingPresent = patient.entries.some((entry) => {
+              if (entry.type === "HealthCheck") {
+                return true;
+              }
+              return false;
+            });
+
+            return (
+              <Table.Row key={patient.id}>
+                <Table.Cell>
+                  <Link to={`/patients/${patient.id}`}>{patient.name}</Link>
+                </Table.Cell>
+                <Table.Cell>{patient.gender}</Table.Cell>
+                <Table.Cell>{patient.occupation}</Table.Cell>
+                <Table.Cell>
+                  {healthRatingPresent ? (
+                    <HealthRating patient={patient} />
+                  ) : (
+                    "Not Available"
+                  )}
+                </Table.Cell>
+              </Table.Row>
+            );
+          })}
         </Table.Body>
       </Table>
       <AddPatientModal
