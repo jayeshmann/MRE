@@ -8,7 +8,6 @@ interface HealthRatingProps {
 
 export const HealthRating: React.FC<HealthRatingProps> = ({ patient }) => {
   const [recentHealthRating, setRecentHealthRating] = useState(0);
-  console.log("HealthRating", recentHealthRating);
   useEffect(() => {
     patient.entries.sort((a, b) => {
       return (new Date(a.date) as any) - (new Date(b.date) as any);
