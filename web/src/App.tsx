@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 
 import { apiBaseUrl } from "./constants";
@@ -35,9 +35,14 @@ const App: React.FC = () => {
           <div className="nav">
             <div className="ul">
               <div className="li">
-                <Link about="home" title="Back to home" to="/" className="btn">
+                <a
+                  about="home"
+                  title="Back to home"
+                  href="/"
+                  className="main-heading"
+                >
                   Medical Record Entry
-                </Link>
+                </a>
               </div>
             </div>
           </div>

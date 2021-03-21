@@ -63,13 +63,20 @@ const PatientListPage: React.FC = () => {
             return (
               <Table.Row key={patient.id}>
                 <Table.Cell>
-                  <Link to={`/patients/${patient.id}`}>{patient.name}</Link>
+                  <Link
+                    to={`/patients/${patient.id}`}
+                    className={`fancy allsides-${Math.floor(
+                      Math.random() * (6 - 1 + 1) + 1
+                    )}`}
+                  >
+                    {patient.name}
+                  </Link>
                 </Table.Cell>
                 <Table.Cell>{patient.gender}</Table.Cell>
                 <Table.Cell>{patient.occupation}</Table.Cell>
                 <Table.Cell>
                   {healthRatingPresent ? (
-                    <HealthRating patient={patient} />
+                    <HealthRating entries={patient.entries} />
                   ) : (
                     "Not Available"
                   )}
