@@ -1,50 +1,78 @@
 import express from "express";
-import patientService from "../services/patientService";
+import PatientModel from "../models/patients";
+import { PublicPatient } from "../types";
 import { toNewEntries, toNewPatient } from "../utils/index";
 
 const patientRouter = express.Router();
 
-patientRouter.get("/", (_req, res) => {
-  res.status(200).json(patientService.getNonSensitiveEntries());
+patientRouter.get("/all", async (_req, res) => {
+  const allPatients = await PatientModel.find({});
+  res.status(200).json(allPatients);
 });
 
-patientRouter.get("/:id", (req, res) => {
+patientRouter.get("/", async (_req, res) => {
+  const allPatients = await PatientModel.find({});
+  const result = allPatients.map(
+    ({ id, name, occupation, gender, dateOfBirth, entries }: PublicPatient) => {
+      return { id, name, occupation, gender, dateOfBirth, entries };
+    }
+  );
+  // res.status(200).json(patientService.getNonSensitiveEntries());
+  res.status(200).json(result);
+});
+patientRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
-    const singlePatient = patientService.getPatient(id);
-    res.status(200).json(singlePatient);
+    // const singlePatient = patientService.getPatient(id);
+    const patientFound = await PatientModel.findById(id);
+    res.status(200).json(patientFound);
   } catch (e: unknown) {
     if (e instanceof Error) res.status(400).send(e.message);
   }
 });
 
-patientRouter.post("/", (req, res) => {
+patientRouter.post("/", async (req, res) => {
   try {
     const newPatient = toNewPatient(req.body);
-    const addedPatient = patientService.addPatient(newPatient);
+    // const addedPatient = patientService.addPatient(newPatient);
 
-    res.json(addedPatient);
+    const newPatientDB = new PatientModel({
+      ...newPatient,
+      entries: [],
+    });
+    const addedPatientDB = await newPatientDB.save();
+    res.json(addedPatientDB);
   } catch (e: unknown) {
     if (e instanceof Error) res.status(400).send(e.message);
   }
 });
 
-patientRouter.post("/:id/entries", (req, res) => {
+patientRouter.post("/:id/entries", async (req, res) => {
   const id = req.params.id;
 
   try {
     const newEntry = toNewEntries(req.body);
-    const singlePatient = patientService.getPatient(id);
+    const patientFound = await PatientModel.findById(id);
+    // const singlePatient = patientService.getPatient(id);
     /* if (!singlePatient) {
       res.status(400).send({ error: `No Patient with ID="${id}" found.` });
     } */
-    const updatedPatient = patientService.addEntriesToPatient(
-      singlePatient,
-      newEntry
-    );
+    const existingEntries = patientFound.entries;
 
-    res.json(updatedPatient);
+    const newEntries = {
+      entries: existingEntries.concat(newEntry),
+    };
+    /* const updatedPatient = patientService.addEntriesToPatient(
+      patientFound,
+      newEntry
+    ); */
+
+    const result = await PatientModel.findByIdAndUpdate(id, newEntries, {
+      new: true,
+    });
+
+    res.json(result);
   } catch (e: unknown) {
     if (e instanceof Error) res.status(400).send(e.message);
   }

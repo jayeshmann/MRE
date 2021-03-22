@@ -1,5 +1,5 @@
 {
-  "name": "patientor-server",
+  "name": "mre-server",
   "version": "1.0.0",
   "main": "./src/index.ts",
   "author": "Jayesh Mann",
@@ -15,7 +15,12 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "mongodb": "^3.6.5",
+    "mongoose": "^5.12.1",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
