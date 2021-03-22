@@ -26,7 +26,8 @@ yarn
 
 - `/api/ping` - responds with `pong` and status `200 OK`
 - `/api/diagnoses` - list of diagnosis codes used to treat patients
-- `/api/patients` - patient data
+- `/api/patients` - non-sensitive patient data
+- `/api/patients/all` - full patient data
 - `/api/patients/:id/entries` - list of entries by the healthcare provider recording the patients
   consultation including description, type of visit (hospital/check up/occupational healthcare), diagnosis, specialist, etc
 
@@ -34,13 +35,16 @@ All data is server side validated for type and max lengths.
 
 ### Dev build
 
+Add mongodb url to `MONGODB_URI` in `.env` file.
+`.env.example` file is provided.
+
 Run the backend
 
 ```bash
 yarn dev2
 ```
 
-Server listens on port 3001 by default or can be configured via PORT env var.
+Server listens on port `3001` by default or can be configured via `PORT` env var.
 
 ### Prod build
 
