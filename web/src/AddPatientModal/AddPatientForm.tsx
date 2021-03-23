@@ -4,6 +4,7 @@ import { Field, Formik, Form } from "formik";
 
 import { TextField, SelectField, GenderOption } from "./FormField";
 import { Gender, Patient } from "../types";
+import { useStateValue } from "../state";
 
 /*
  * use type Patient, but omit id and entries,
@@ -19,10 +20,12 @@ interface Props {
 const genderOptions: GenderOption[] = [
   { value: Gender.Male, label: "Male" },
   { value: Gender.Female, label: "Female" },
-  { value: Gender.Other, label: "Other" }
+  { value: Gender.Other, label: "Other" },
 ];
 
 export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
+  const [{ patients }] = useStateValue();
+
   return (
     <Formik
       initialValues={{
@@ -30,10 +33,14 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         ssn: "",
         dateOfBirth: "",
         occupation: "",
-        gender: Gender.Other
+        gender: Gender.Other,
       }}
       onSubmit={onSubmit}
-      validate={values => {
+      validate={(values) => {
+        const ssnIsUnique = Object.values(patients).some(
+          (patient: Patient) => values.ssn === patient.ssn
+        );
+
         const requiredError = "Field is required";
         const errors: { [field: string]: string } = {};
         if (!values.name) {
@@ -41,6 +48,9 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         }
         if (!values.ssn) {
           errors.ssn = requiredError;
+        }
+        if (ssnIsUnique) {
+          errors.ssn = "SSN already exists!";
         }
         if (!values.dateOfBirth) {
           errors.dateOfBirth = requiredError;
@@ -78,11 +88,7 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               name="occupation"
               component={TextField}
             />
-            <SelectField
-              label="Gender"
-              name="gender"
-              options={genderOptions}
-            />
+            <SelectField label="Gender" name="gender" options={genderOptions} />
             <Grid>
               <Grid.Column floated="left" width={5}>
                 <Button type="button" onClick={onCancel} color="red">
