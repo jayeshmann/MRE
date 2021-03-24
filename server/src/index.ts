@@ -42,6 +42,14 @@ app.use("/api/patients", patientRouter);
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
+process.on("SIGINT", function onSigint() {
+  process.exit();
+});
+
+process.on("SIGTERM", function onSigterm() {
+  process.exit();
+});
+
 app.listen(config.PORT, () => {
   console.log(`Server serving at ${config.PORT}`);
 });
