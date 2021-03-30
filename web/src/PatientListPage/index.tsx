@@ -63,50 +63,54 @@ const PatientListPage: React.FC = () => {
           onChange={handleSearchChange}
         />
       </Container>
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Gender</Table.HeaderCell>
-            <Table.HeaderCell>Occupation</Table.HeaderCell>
-            <Table.HeaderCell>Health Rating</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {Object.values(filteredList).map((patient: Patient) => {
-            const healthRatingPresent = patient.entries.some((entry) => {
-              if (entry.type === "HealthCheck") {
-                return true;
-              }
-              return false;
-            });
+      {filteredList.length ? (
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell>Gender</Table.HeaderCell>
+              <Table.HeaderCell>Occupation</Table.HeaderCell>
+              <Table.HeaderCell>Health Rating</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {Object.values(filteredList).map((patient: Patient) => {
+              const healthRatingPresent = patient.entries.some((entry) => {
+                if (entry.type === "HealthCheck") {
+                  return true;
+                }
+                return false;
+              });
 
-            return (
-              <Table.Row key={patient.id}>
-                <Table.Cell>
-                  <Link
-                    to={`/patients/${patient.id}`}
-                    className={`fancy allsides-${Math.floor(
-                      Math.random() * (6 - 1 + 1) + 1
-                    )}`}
-                  >
-                    {patient.name}
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>{patient.gender}</Table.Cell>
-                <Table.Cell>{patient.occupation}</Table.Cell>
-                <Table.Cell>
-                  {healthRatingPresent ? (
-                    <HealthRating entries={patient.entries} />
-                  ) : (
-                    "Not Available"
-                  )}
-                </Table.Cell>
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </Table>
+              return (
+                <Table.Row key={patient.id}>
+                  <Table.Cell>
+                    <Link
+                      to={`/patients/${patient.id}`}
+                      className={`fancy allsides-${Math.floor(
+                        Math.random() * (6 - 1 + 1) + 1
+                      )}`}
+                    >
+                      {patient.name}
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>{patient.gender}</Table.Cell>
+                  <Table.Cell>{patient.occupation}</Table.Cell>
+                  <Table.Cell>
+                    {healthRatingPresent ? (
+                      <HealthRating entries={patient.entries} />
+                    ) : (
+                      "Not Available"
+                    )}
+                  </Table.Cell>
+                </Table.Row>
+              );
+            })}
+          </Table.Body>
+        </Table>
+      ) : (
+        <h2>No Patients found!</h2>
+      )}
       <AddPatientModal
         modalOpen={modalOpen}
         onSubmit={submitNewPatient}
