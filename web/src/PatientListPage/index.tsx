@@ -64,7 +64,7 @@ const PatientListPage: React.FC = () => {
         />
       </Container>
       {filteredList.length ? (
-        <Table celled>
+        <Table celled color="red">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Name</Table.HeaderCell>
