@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Container, Table, Button, Input } from "semantic-ui-react";
+import { Container, Table, Button, Input, Icon } from "semantic-ui-react";
 
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import AddPatientModal from "../AddPatientModal";
@@ -55,7 +55,10 @@ const PatientListPage: React.FC = () => {
   return (
     <div className="App">
       <Container textAlign="center">
-        <h3>Patient list</h3>
+        <h3>
+          <Icon name="medrt" color="red"></Icon> Patient List{" "}
+          <Icon name="medrt" color="red"></Icon>
+        </h3>
         <Input
           icon={{ name: "search", circular: true }}
           placeholder="Search..."
@@ -67,10 +70,23 @@ const PatientListPage: React.FC = () => {
         <Table celled color="red">
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Gender</Table.HeaderCell>
-              <Table.HeaderCell>Occupation</Table.HeaderCell>
-              <Table.HeaderCell>Health Rating</Table.HeaderCell>
+              <Table.HeaderCell>
+                <Icon name="user circle outline" />
+                Name
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <Icon name="male" />
+                Gender
+              </Table.HeaderCell>
+
+              <Table.HeaderCell>
+                <Icon name="suitcase" />
+                Occupation
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <Icon name="heartbeat" />
+                Health Rating
+              </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
