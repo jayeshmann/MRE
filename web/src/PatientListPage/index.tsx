@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Container, Table, Button } from "semantic-ui-react";
+import { Container, Table, Button, Input } from "semantic-ui-react";
 
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import AddPatientModal from "../AddPatientModal";
@@ -56,9 +56,12 @@ const PatientListPage: React.FC = () => {
     <div className="App">
       <Container textAlign="center">
         <h3>Patient list</h3>
-        <div>
-          Search: <input value={newSearch} onChange={handleSearchChange} />{" "}
-        </div>
+        <Input
+          icon={{ name: "search", circular: true }}
+          placeholder="Search..."
+          value={newSearch}
+          onChange={handleSearchChange}
+        />
       </Container>
       <Table celled>
         <Table.Header>
