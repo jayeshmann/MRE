@@ -16,12 +16,27 @@ const PatientListPage: React.FC = () => {
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | undefined>();
 
+  const [newSearch, setNewSearch] = React.useState("");
+
   const openModal = (): void => setModalOpen(true);
 
   const closeModal = (): void => {
     setModalOpen(false);
     setError(undefined);
   };
+
+  const handleSearchChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setNewSearch(event.target.value);
+  };
+
+  const filteredList = Object.values(patients).filter(
+    (patient) =>
+      patient.name
+        .toLocaleLowerCase()
+        .includes(newSearch.toLocaleLowerCase()) === true
+  );
 
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
@@ -41,6 +56,9 @@ const PatientListPage: React.FC = () => {
     <div className="App">
       <Container textAlign="center">
         <h3>Patient list</h3>
+        <div>
+          Search: <input value={newSearch} onChange={handleSearchChange} />{" "}
+        </div>
       </Container>
       <Table celled>
         <Table.Header>
@@ -52,7 +70,7 @@ const PatientListPage: React.FC = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {Object.values(patients).map((patient: Patient) => {
+          {Object.values(filteredList).map((patient: Patient) => {
             const healthRatingPresent = patient.entries.some((entry) => {
               if (entry.type === "HealthCheck") {
                 return true;
